@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gold Coins - Lanora Gold</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <style>
+    .product-page {
+      display: flex;
+      max-width: 1200px;
+      margin: 40px auto;
+      gap: 40px;
+      padding: 0 20px;
+    }
+    .product-image {
+      flex: 1;
+      max-width: 400px;
+    }
+    .product-image img {
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .product-info {
+      flex: 1;
+      font-family: 'Georgia', serif;
+      color: #333;
+    }
+    .product-info h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: #d4af37; /* Gold color */
+    }
+    .product-info p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+    .current-rate {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #1a1a1a;
+      background-color: #f8d14a;
+      padding: 15px 20px;
+      border-radius: 8px;
+      width: fit-content;
+      box-shadow: 0 4px 10px rgba(212, 175, 55, 0.4);
+    }
+    /* Placeholder for TradingView widget */
+    .tradingview-widget-container {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1 class="logo">Lanora Gold</h1>
+    </div>
+  </header>
+
+  <main class="product-page">
+    <div class="product-image">
+      <img src="assets/images/gold-coin.jpg" alt="Gold Coins" />
+    </div>
+    <div class="product-info">
+      <h1>Gold Coins</h1>
+      <p>
+        Our gold coins are crafted with the highest purity and quality standards. 
+        Perfect for investment, gifting, or collection, these coins come in various weights and designs certified by trusted mints.
+      </p>
+      <div class="current-rate">
+        Current Rate: <span id="gold-rate">Loading...</span>
+      </div>
+      <div class="tradingview-widget-container">
+        <!-- TradingView widget placeholder -->
+        <p>TradingView widget will be integrated here.</p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container contact-container">
+      <p>&copy; 2024 Lanora Gold LLC. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Placeholder script to simulate rate loading
+    document.getElementById('gold-rate').textContent = 'AED 245.00/g';
+  </script>
+</body>
+</html>
