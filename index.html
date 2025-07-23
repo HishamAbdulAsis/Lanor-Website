@@ -4,17 +4,26 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lanora Gold</title>
-  <link rel="stylesheet" href="styles.css" />
   <!-- AOS Library -->
   <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
-  <!-- Updated CSS link -->
+  <!-- CSS -->
   <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 <body>
+  <!-- Scroll Arrow -->
+  <div class="section-arrow" id="nextSection">
+    <svg viewBox="0 0 24 24">
+      <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+    </svg>
+  </div>
+
   <!-- Header -->
   <header>
   <div class="container">
-    <h1 class="logo">Lanora Gold</h1>
+    <div class="logo">
+      <img src="assets/images/lanora-gold-white.png" alt="Lanora Gold" class="logo-img">
+      <h1>Lanora Gold</h1>
+    </div>
 
     <!-- Hamburger Menu -->
     <div class="menu-toggle" id="menu-toggle">
@@ -23,12 +32,10 @@
 
     <nav id="nav">
       <ul class="nav-links">
-        <li><a href="#about">About</a></li>
+        <li><a href="#about">About Us</a></li>
         <li><a href="#why-us">Why Us</a></li>
-        <li><a href="#home">Home</a></li>
         <li><a href="#services">Services</a></li>
         <li><a href="#products">Products</a></li>
-        <li><a href="#live-rates">Live Rates</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
     </nav>
@@ -87,27 +94,25 @@
 
         <div class="carousel-track" id="carousel-track">
           <div class="carousel-item">
-            <a href="product-gold-coins.html">
-              <img src="assets/images/gold-coin.jpg" alt="Gold Coins">
-              <h3>Gold Coins</h3>
-            </a>
-          </div>
-          <div class="carousel-item">
-            <a href="product-silver-bars.html">
-              <img src="assets/images/silver-bar.jpg" alt="Silver Bars">
-              <h3>Silver Bars</h3>
-            </a>
-          </div>
-          <div class="carousel-item">
-            <a href="product-platinum-kilos.html">
-              <img src="assets/images/platinum.jpg" alt="Platinum Kilo Bars">
-              <h3>Platinum Kilo Bars</h3>
-            </a>
-          </div>
-          <div class="carousel-item">
-            <a href="product-pamp.html">
-              <img src="assets/images/pamp.jpg" alt="Swiss PAMP Bars">
+            <a href="product-pamp.html" class="product-link">
+              <div class="product-image">
+                <img src="assets/images/pamp.jpg" alt="Swiss PAMP Bars">
+              </div>
               <h3>Swiss PAMP Bars</h3>
+              <div class="show-more">
+                Show more <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+              </div>
+            </a>
+          </div>
+          <div class="carousel-item">
+            <a href="product-gold-coins.html" class="product-link">
+              <div class="product-image">
+                <img src="assets/images/gold-coin.jpg" alt="Gold Coins">
+              </div>
+              <h3>Gold Coins</h3>
+              <div class="show-more">
+                Show more <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+              </div>
             </a>
           </div>
         </div>
@@ -118,70 +123,60 @@
   </section>
 
 
-  <!-- Live Rates Section -->
-  <section id="live-rates" data-aos="fade-left">
-    <div class="container">
-      <div class="live-ticker">
-        <div class="ticker-title">Live Gold Rate (AED):</div>
-        <div class="ticker-items">
-          <span>24K: AED 245.00/g</span>
-          <span>22K: AED 228.00/g</span>
-          <span>21K: AED 220.50/g</span>
-          <span>18K: AED 190.75/g</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- Contact & Footer Section -->
   <footer id="contact" data-aos="fade-up">
     <div class="container contact-container">
       <!-- Left Column -->
       <div class="contact-left">
-        <img src="assets/images/lanora-logo.png" alt="Lanora Gold Logo" class="contact-logo" />
-        <h3>Lanora Gold LLC</h3>
-        <div class="social-links" style="margin-top: 10px; display: flex; gap: 15px;">
-          <a href="#" target="_blank" rel="noopener">
-            <img src="assets/images/facebook-icon.png" alt="Facebook" style="height: 30px;"/>
+        <div class="logo-section">
+          <img src="assets/images/lanora-logo.png" alt="Lanora Gold Logo" class="contact-logo" />
+          <span class="company-name">Lanora Gold LLC</span>
+        </div>
+        <div class="social-links">
+          <a href="#" class="social-link">
+            <img src="assets/images/facebook.png" alt="Facebook"/>
           </a>
-          <a href="#" target="_blank" rel="noopener">
-            <img src="assets/images/instagram-icon.png" alt="Instagram" style="height: 30px;"/>
+          <a href="#" class="social-link">
+            <img src="assets/images/instagram.png" alt="Instagram"/>
           </a>
-          <a href="#" target="_blank" rel="noopener">
-            <img src="assets/images/twitter-icon.png" alt="Twitter" style="height: 30px;"/>
+          <a href="#" class="social-link">
+            <img src="assets/images/twitter.png" alt="Twitter"/>
           </a>
         </div>
       </div>
 
       <!-- Middle Column -->
-      <div class="contact-middle" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+      <div class="contact-middle">
         <h3>Our Location</h3>
-        <div id="map" style="width: 100%; height: 250px;"></div>
+        <div id="map"></div>
       </div>
 
       <!-- Right Column -->
-      <div class="contact-right" style="display: flex; flex-direction: column; align-items: flex-end;">
+      <div class="contact-right">
         <h3>Contact Us</h3>
-        <p>
-          Lanora Gold LLC<br />
-          Gold Center, Deira, Dubai, UAE<br />
-          Phone: +971 50 123 4567<br />
-          Email: contact@lanoragold.com
-        </p>
-        <span style="color: #f8d14a; font-weight: 600; margin-top: 20px;">Download Our App</span>
-        <div class="app-links" style="margin-top: 10px; display: flex; flex-direction: column; gap: 10px; justify-content: flex-end; align-items: flex-end;">
-          <a href="https://apps.apple.com/app/your-app-id" target="_blank" rel="noopener" style="display: flex; align-items: center; background-color: black; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; width: 180px; gap: 10px;">
-            <img src="assets/images/appstore-badge.png" alt="App Store" style="height: 24px;"/>
-            <span>Download on the<br />App Store</span>
+        <div class="contact-info">
+          <p class="company">Lanora Gold LLC</p>
+          <p class="address">Gold Center, Deira, Dubai, UAE</p>
+          <p class="phone">Phone: <span>+971 50 123 4567</span></p>
+          <p class="email">Email: <span>contact@lanoragold.com</span></p>
+        </div>
+        <div class="app-links">
+          <a href="https://apps.apple.com/app/your-app-id" target="_blank" rel="noopener" class="store-box">
+            <img src="assets/images/appstore-badge.png" alt="Download on the App Store"/>
           </a>
-          <a href="https://play.google.com/store/apps/details?id=your.app.id" target="_blank" rel="noopener" style="display: flex; align-items: center; background-color: black; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; width: 180px; gap: 10px;">
-            <img src="assets/images/playstore-badge.png" alt="Google Play" style="height: 24px;"/>
-            <span>Download from<br />Google Play</span>
+          <a href="https://play.google.com/store/apps/details?id=your.app.id" target="_blank" rel="noopener" class="store-box">
+            <img src="assets/images/playstore-badge.png" alt="Get it on Google Play"/>
           </a>
         </div>
       </div>
     </div>
-    <div style="text-align: center; margin-top: 20px; color: #f8d14a; font-size: 14px;">
+    <!-- Back to Top Arrow -->
+    <div class="back-to-top" id="backToTop">
+      <svg viewBox="0 0 24 24">
+        <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/>
+      </svg>
+    </div>
+    <div style="text-align: center; margin-top: 20px; color: #ced0d3; font-size: 14px;">
       &copy; 2025 Lanora Gold LLC. All rights reserved.
     </div>
   </footer>

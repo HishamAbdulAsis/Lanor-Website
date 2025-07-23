@@ -1,9 +1,112 @@
+// Menu Toggle
 const menuToggle = document.getElementById('menu-toggle');
 const nav = document.getElementById('nav');
 
 menuToggle.addEventListener('click', () => {
   nav.classList.toggle('active');
 });
+
+// Smooth Scroll
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({
+        behavior: 'smooth'
+      });
+    }
+  });
+});
+
+// Section Arrow Navigation
+const nextSectionArrow = document.getElementById('nextSection');
+const footer = document.querySelector('footer');
+
+function toggleNextSectionArrow() {
+  if (!nextSectionArrow || !footer) return;
+  
+  const footerRect = footer.getBoundingClientRect();
+  const isFooterVisible = footerRect.top <= window.innerHeight;
+
+  const productSection = document.getElementById('products');
+  const productRect = productSection ? productSection.getBoundingClientRect() : null;
+  const isProductVisible = productRect ? (productRect.top <= window.innerHeight && productRect.bottom >= 0) : false;
+  
+  // Hide arrow if footer or product section is visible
+  if (isFooterVisible || isProductVisible) {
+    nextSectionArrow.style.opacity = '0';
+    nextSectionArrow.style.pointerEvents = 'none';
+  } else {
+    nextSectionArrow.style.opacity = '1';
+    nextSectionArrow.style.pointerEvents = 'auto';
+  }
+}
+
+if (nextSectionArrow) {
+  // Handle click event
+  nextSectionArrow.addEventListener('click', () => {
+    const sections = Array.from(document.querySelectorAll('section'));
+    const viewportHeight = window.innerHeight;
+    const scrollPosition = window.scrollY;
+    
+    // Find the current section
+    const currentSectionIndex = sections.findIndex(section => {
+      const rect = section.getBoundingClientRect();
+      return rect.top <= viewportHeight / 2 && rect.bottom > viewportHeight / 2;
+    });
+    
+    // Scroll to next section
+    if (currentSectionIndex < sections.length - 1) {
+      sections[currentSectionIndex + 1].scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+
+  // Show/hide arrow on scroll
+  window.addEventListener('scroll', toggleNextSectionArrow);
+  // Initial check
+  toggleNextSectionArrow();
+}
+
+// Back to Top functionality
+const backToTopButton = document.getElementById('backToTop');
+if (backToTopButton) {
+  backToTopButton.addEventListener('click', () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  });
+}
+
+// Google Maps
+function initMap() {
+  const location = { lat: 25.2697, lng: 55.2985 }; // Dubai coordinates
+  const map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 14,
+    center: location,
+    styles: [
+      {
+        elementType: 'geometry',
+        stylers: [{ color: '#242f3e' }]
+      },
+      {
+        elementType: 'labels.text.stroke',
+        stylers: [{ color: '#242f3e' }]
+      },
+      {
+        elementType: 'labels.text.fill',
+        stylers: [{ color: '#746855' }]
+      }
+    ]
+  });
+  
+  new google.maps.Marker({
+    position: location,
+    map: map,
+    title: 'Lanora Gold LLC'
+  });
+}
 
 const track = document.getElementById("carousel-track");
 const items = document.querySelectorAll(".carousel-item");
