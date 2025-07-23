@@ -44,26 +44,57 @@ function toggleNextSectionArrow() {
 }
 
 if (nextSectionArrow) {
+  let isScrolling = false;
+
   // Handle click event
   nextSectionArrow.addEventListener('click', () => {
+    if (isScrolling) return; // Prevent multiple clicks during scroll
+    
     const sections = Array.from(document.querySelectorAll('section'));
     const viewportHeight = window.innerHeight;
-    const scrollPosition = window.scrollY;
     
     // Find the current section
     const currentSectionIndex = sections.findIndex(section => {
       const rect = section.getBoundingClientRect();
-      return rect.top <= viewportHeight / 2 && rect.bottom > viewportHeight / 2;
+      const sectionCenter = rect.top + rect.height / 2;
+      return sectionCenter > -50 && sectionCenter < viewportHeight;
     });
     
     // Scroll to next section
     if (currentSectionIndex < sections.length - 1) {
-      sections[currentSectionIndex + 1].scrollIntoView({ behavior: 'smooth' });
+      isScrolling = true;
+      const nextSection = sections[currentSectionIndex + 1];
+      
+      // Disable AOS animations temporarily
+      nextSection.setAttribute('data-aos-delay', '0');
+      nextSection.setAttribute('data-aos-duration', '0');
+      
+      // Scroll to next section
+      const offset = nextSection.offsetTop;
+      window.scrollTo({
+        top: offset,
+        behavior: 'smooth'
+      });
+
+      // Re-enable AOS animations after scroll
+      setTimeout(() => {
+        nextSection.removeAttribute('data-aos-delay');
+        nextSection.removeAttribute('data-aos-duration');
+        isScrolling = false;
+      }, 1000);
     }
   });
 
   // Show/hide arrow on scroll
-  window.addEventListener('scroll', toggleNextSectionArrow);
+  let scrollTimeout;
+  window.addEventListener('scroll', () => {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      toggleNextSectionArrow();
+      isScrolling = false;
+    }, 150);
+  });
+
   // Initial check
   toggleNextSectionArrow();
 }
@@ -108,29 +139,17 @@ function initMap() {
   });
 }
 
+// Product Carousel
 const track = document.getElementById("carousel-track");
 const items = document.querySelectorAll(".carousel-item");
 const prevBtn = document.getElementById("prevBtn");
 const nextBtn = document.getElementById("nextBtn");
 
-let index = 1; // Start at first real slide (after lastClone)
-let itemWidth = items[0].offsetWidth + 20; // Adjust as needed
-
-// Clone first and last items for infinite effect
-const firstClone = items[0].cloneNode(true);
-const lastClone = items[items.length - 1].cloneNode(true);
-
-firstClone.id = "first-clone";
-lastClone.id = "last-clone";
-
-track.appendChild(firstClone);
-track.prepend(lastClone);
-
-const allItems = document.querySelectorAll(".carousel-item");
-const totalItems = allItems.length;
+let index = 0;  // Start at first slide
+let itemWidth = items[0].offsetWidth + 20;  // Width + gap
 
 // Set initial position
-track.style.transform = `translateX(-${itemWidth * index}px)`;
+track.style.transform = `translateX(0)`;
 
 function updateCarousel() {
   track.style.transition = "transform 0.5s ease-in-out";
@@ -138,37 +157,22 @@ function updateCarousel() {
 }
 
 function nextSlide() {
-  index++;
+  if (index >= items.length - 1) {
+    index = 0;
+  } else {
+    index++;
+  }
   updateCarousel();
 }
 
 function prevSlide() {
-  index--;
+  if (index <= 0) {
+    index = items.length - 1;
+  } else {
+    index--;
+  }
   updateCarousel();
 }
-
-// Auto-slide every 2 seconds
-let autoSlide = setInterval(nextSlide, 2000);
-
-// Pause auto-slide on hover
-track.addEventListener("mouseenter", () => clearInterval(autoSlide));
-track.addEventListener("mouseleave", () => {
-  autoSlide = setInterval(nextSlide, 2000);
-});
-
-// Looping fix on transition end
-track.addEventListener("transitionend", () => {
-  if (allItems[index].id === "first-clone") {
-    track.style.transition = "none";
-    index = 1;
-    track.style.transform = `translateX(-${itemWidth * index}px)`;
-  }
-  if (allItems[index].id === "last-clone") {
-    track.style.transition = "none";
-    index = totalItems - 2;
-    track.style.transform = `translateX(-${itemWidth * index}px)`;
-  }
-});
 
 // Button event listeners
 nextBtn.addEventListener("click", nextSlide);
@@ -176,21 +180,75 @@ prevBtn.addEventListener("click", prevSlide);
 
 // Resize handler to recalc item width and adjust position
 window.addEventListener("resize", () => {
-  itemWidth = allItems[0].offsetWidth + 20;
-  track.style.transition = "none";
-  track.style.transform = `translateX(-${itemWidth * index}px)`;
+  itemWidth = items[0].offsetWidth + 20;  // Width + gap
+  updateCarousel();
 });
 
-function initMap() {
-  const lanoraLocation = { lat: 25.2705, lng: 55.3075 }; // Replace with exact lat/lng of your shop
-  const map = new google.maps.Map(document.getElementById("map"), {
-    zoom: 15,
-    center: lanoraLocation,
+// Hero Section Slideshow
+document.addEventListener('DOMContentLoaded', function() {
+  const heroImages = [
+    'assets/images/hero.jpg',
+    'assets/images/pamp.jpg',
+    'assets/images/gold-coin.jpg'
+  ];
+
+  const heroImg = document.getElementById('hero-slideshow');
+  if (!heroImg) {
+    console.error('Hero slideshow element not found');
+    return;
+  }
+
+  let currentIndex = 0;
+  let isTransitioning = false;
+
+  // Preload all images first
+  Promise.all(heroImages.map(src => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = resolve;
+      img.onerror = reject;
+      img.src = src;
+    });
+  }))
+  .then(() => {
+    console.log('All hero images preloaded');
+    startSlideshow();
+  })
+  .catch(error => {
+    console.error('Error preloading hero images:', error);
   });
 
-  new google.maps.Marker({
-    position: lanoraLocation,
-    map: map,
-    title: "Lanora Gold LLC"
-  });
-}
+  function startSlideshow() {
+    // Set initial state
+    heroImg.style.opacity = '1';
+    heroImg.style.transform = 'scale(1)';
+
+    setInterval(nextImage, 8000); // Show each image for 8 seconds
+  }
+
+  function nextImage() {
+    if (isTransitioning) return;
+    isTransitioning = true;
+
+    // Start zoom effect
+    heroImg.style.transform = 'scale(1.08)';
+
+    // After zoom, start fade out
+    setTimeout(() => {
+      heroImg.style.opacity = '0';
+
+      // After fade out, change image
+      setTimeout(() => {
+        currentIndex = (currentIndex + 1) % heroImages.length;
+        heroImg.src = heroImages[currentIndex];
+        heroImg.style.transform = 'scale(1)';
+
+        // Fade in new image
+        setTimeout(() => {
+          heroImg.style.opacity = '1';
+          isTransitioning = false;
+        }, 100);
+      }, 1500); // Increased fade out duration
+    }, 3000); // Increased zoom duration
+  }
+});
