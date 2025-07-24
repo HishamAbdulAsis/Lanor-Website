@@ -188,8 +188,8 @@ window.addEventListener("resize", () => {
 document.addEventListener('DOMContentLoaded', function() {
   const heroImages = [
     'assets/images/hero.jpg',
-    'assets/images/pamp.jpg',
-    'assets/images/gold-coin.jpg'
+    'assets/images/pamp-gold-bar-collection.jpg',
+    'assets/images/pamp-platinum-bar-collection.jpg'
   ];
 
   const heroImg = document.getElementById('hero-slideshow');
@@ -223,7 +223,8 @@ document.addEventListener('DOMContentLoaded', function() {
     heroImg.style.opacity = '1';
     heroImg.style.transform = 'scale(1)';
 
-    setInterval(nextImage, 8000); // Show each image for 8 seconds
+    // Start the slideshow loop
+    setInterval(nextImage, 8000); // Change image every 8 seconds
   }
 
   function nextImage() {
@@ -232,23 +233,98 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Start zoom effect
     heroImg.style.transform = 'scale(1.08)';
-
-    // After zoom, start fade out
+    
     setTimeout(() => {
+      // Fade out
       heroImg.style.opacity = '0';
-
-      // After fade out, change image
+      
       setTimeout(() => {
+        // Change image and reset transform
         currentIndex = (currentIndex + 1) % heroImages.length;
         heroImg.src = heroImages[currentIndex];
         heroImg.style.transform = 'scale(1)';
-
+        
         // Fade in new image
         setTimeout(() => {
           heroImg.style.opacity = '1';
           isTransitioning = false;
         }, 100);
-      }, 1500); // Increased fade out duration
-    }, 3000); // Increased zoom duration
+      }, 1500); // Fade out duration
+    }, 3000); // Zoom duration
   }
+});
+
+// Taglines Animation
+function initTaglinesAnimation() {
+  const taglines = document.querySelectorAll('.tagline');
+  let currentIndex = 0;
+
+  // Show first tagline
+  taglines[0].classList.add('active');
+
+  function nextTagline() {
+    // Remove active class from current tagline
+    taglines[currentIndex].classList.remove('active');
+    taglines[currentIndex].classList.add('exit');
+
+    // Update index
+    currentIndex = (currentIndex + 1) % taglines.length;
+
+    // Add active class to next tagline
+    setTimeout(() => {
+      taglines.forEach(tagline => tagline.classList.remove('exit'));
+      taglines[currentIndex].classList.add('active');
+    }, 600);
+  }
+
+  // Change tagline every 4 seconds
+  setInterval(nextTagline, 4000);
+}
+
+// Initialize taglines animation when DOM is loaded
+document.addEventListener('DOMContentLoaded', initTaglinesAnimation);
+
+// Parallax effect
+document.addEventListener('DOMContentLoaded', function() {
+  const parallaxBg = document.querySelector('.parallax-bg');
+  const whyUsSection = document.querySelector('.why-us-section');
+  
+  if (!parallaxBg || !whyUsSection) return;
+
+  function updateParallax() {
+    if (window.innerWidth <= 768) {
+      parallaxBg.style.transform = 'none';
+      return;
+    }
+
+    const rect = whyUsSection.getBoundingClientRect();
+    const viewportHeight = window.innerHeight;
+    const sectionTop = rect.top;
+    
+    // Only update when section is visible
+    if (sectionTop < viewportHeight && sectionTop > -rect.height) {
+      // Calculate how far the section is from the viewport center
+      const distanceFromCenter = (viewportHeight / 2) - (sectionTop + rect.height / 2);
+      // Apply parallax effect
+      const movement = (distanceFromCenter * 0.3);
+      parallaxBg.style.transform = `translateY(${movement}px)`;
+    }
+  }
+
+  // Throttle scroll events
+  let ticking = false;
+  window.addEventListener('scroll', function() {
+    if (!ticking) {
+      window.requestAnimationFrame(function() {
+        updateParallax();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+
+  window.addEventListener('resize', updateParallax, { passive: true });
+  
+  // Initial position
+  updateParallax();
 });
