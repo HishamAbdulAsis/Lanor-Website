@@ -145,43 +145,88 @@ const items = document.querySelectorAll(".carousel-item");
 const prevBtn = document.getElementById("prevBtn");
 const nextBtn = document.getElementById("nextBtn");
 
-let index = 0;  // Start at first slide
-let itemWidth = items[0].offsetWidth + 20;  // Width + gap
+let currentIndex = 0;
+const itemsPerView = 3;
+let autoScrollInterval;
 
-// Set initial position
-track.style.transform = `translateX(0)`;
-
-function updateCarousel() {
-  track.style.transition = "transform 0.5s ease-in-out";
-  track.style.transform = `translateX(-${itemWidth * index}px)`;
+// Clone items for infinite loop
+function setupInfiniteLoop() {
+  // Clone all items
+  const allItems = Array.from(items);
+  allItems.forEach(item => {
+    const clone = item.cloneNode(true);
+    track.appendChild(clone);
+  });
 }
 
-function nextSlide() {
-  if (index >= items.length - 1) {
-    index = 0;
+setupInfiniteLoop();
+
+function updateCarousel(direction = 'next') {
+  const itemWidth = 100 / itemsPerView;
+  
+  if (direction === 'next') {
+    currentIndex++;
+    if (currentIndex >= items.length) {
+      // When we reach the end of cloned items, seamlessly jump back
+      setTimeout(() => {
+        track.style.transition = 'none';
+        currentIndex = 0;
+        track.style.transform = `translateX(0)`;
+        // Force reflow
+        track.offsetHeight;
+        track.style.transition = 'transform 0.5s ease-in-out';
+      }, 500);
+    }
   } else {
-    index++;
+    currentIndex--;
+    if (currentIndex < 0) {
+      currentIndex = items.length - 1;
+      track.style.transform = `translateX(-${itemWidth * items.length}%)`;
+    }
   }
-  updateCarousel();
+
+  const translateValue = itemWidth * currentIndex;
+  track.style.transform = `translateX(-${translateValue}%)`;
 }
 
-function prevSlide() {
-  if (index <= 0) {
-    index = items.length - 1;
-  } else {
-    index--;
-  }
-  updateCarousel();
+function startAutoScroll() {
+  stopAutoScroll();
+  autoScrollInterval = setInterval(() => {
+    updateCarousel('next');
+  }, 2000);
 }
 
-// Button event listeners
-nextBtn.addEventListener("click", nextSlide);
-prevBtn.addEventListener("click", prevSlide);
+function stopAutoScroll() {
+  if (autoScrollInterval) {
+    clearInterval(autoScrollInterval);
+  }
+}
 
-// Resize handler to recalc item width and adjust position
+// Event Listeners
+nextBtn.addEventListener("click", () => {
+  stopAutoScroll();
+  updateCarousel('next');
+  startAutoScroll();
+});
+
+prevBtn.addEventListener("click", () => {
+  stopAutoScroll();
+  updateCarousel('prev');
+  startAutoScroll();
+});
+
+// Pause auto-scroll on hover
+track.addEventListener('mouseenter', stopAutoScroll);
+track.addEventListener('mouseleave', startAutoScroll);
+
+// Start auto-scrolling
+startAutoScroll();
+
+// Handle resize
 window.addEventListener("resize", () => {
-  itemWidth = items[0].offsetWidth + 20;  // Width + gap
-  updateCarousel();
+  const itemWidth = 100 / itemsPerView;
+  const translateValue = itemWidth * currentIndex;
+  track.style.transform = `translateX(-${translateValue}%)`;
 });
 
 // Hero Section Slideshow
