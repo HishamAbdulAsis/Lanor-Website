@@ -227,7 +227,7 @@ section .container {
 }
 
 #about {
-  background-color: #2a2a2a;
+  background-color: #000a24;
   color: #fff;
   padding: 60px 0 0 0;
   width: 100%;
@@ -591,12 +591,12 @@ section .container {
 }
 
 #services {
-  background-color: #262626;
+  background-color: #000a24;
   color: #fff;
 }
 
 #products {
-  background-color: #1a1a1a;
+  background-color: #000a24;
   color: #fff;
 }
 
@@ -719,17 +719,19 @@ footer {
 }
 
 .contact-left img.contact-logo {
-  width: 70px;
+  width: 250px;
   height: auto;
+  margin-bottom: 1px;
 }
 
 .contact-left .company-name {
-  font-size: 24px;
-  color: #ced0d3;
-  font-weight: 700;
+  font-size: 32px;
+  color: #ffffff;
+  font-weight: 500;
   font-family: 'Playfair Display', serif;
   white-space: nowrap;
   margin: 0;
+  letter-spacing: 0.5px;
 }
 
 .contact-left .social-links {
